@@ -24,17 +24,14 @@ public class BOJ_1181 {
         }
 
         // 단어 정렬
-        Arrays.sort(arr, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                // 단어의 길이가 같을 경우
-                if (o1.length() == o2.length()) {
-                    // 사전 순 정렬
-                    return o1.compareTo(o2);
-                } else {
-                    // 단어 길이 순 정렬
-                    return o1.length() - o2.length();
-                }
+        Arrays.sort(arr, (o1, o2) -> {
+            // 단어의 길이가 같을 경우
+            if (o1.length() == o2.length()) {
+                // 사전 순 정렬
+                return o1.compareTo(o2);
+            } else {
+                // 단어 길이 순 정렬
+                return o1.length() - o2.length();
             }
         });
 
