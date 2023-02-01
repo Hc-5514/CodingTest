@@ -4,7 +4,7 @@
  * @author Hc-5514
  */
 
-package Baekjoon.Algorithm.Stack;
+package Baekjoon.AC.CLASS_2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
