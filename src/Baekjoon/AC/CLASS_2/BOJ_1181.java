@@ -8,42 +8,48 @@ package Baekjoon.AC.CLASS_2;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 
 public class BOJ_1181 {
 
     public static void main(String[] args) throws Exception {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        HashSet<String> hs = new HashSet<>();
-        ArrayList<String> list;
-
-        // HashSet에 단어 저장 - 중복 단어 제거
         int N = Integer.parseInt(br.readLine());
-        for (int tc = 1; tc <= N; tc++) {
-            hs.add(br.readLine());
+        String[] arr = new String[N];
+
+        // 단어 입력 받기
+        for (int i = 0; i < N; i++) {
+            arr[i] = br.readLine();
         }
 
-        // HashSet -> List 변환 후 정렬
-        list = new ArrayList<>(hs);
-        Collections.sort(list);
-
-        // 길이가 짧은 순서대로 출력 후 List에서 제거
-        int wordLength = 1;
-        while (!list.isEmpty()) {
-            int listSize = list.size();
-            for (int i = 0; i < listSize; i++) {
-                if (list.get(i).length() == wordLength) {
-                    System.out.println(list.get(i));
-                    list.remove(i);
-                    i--;
-                    listSize--;
+        // 단어 정렬
+        Arrays.sort(arr, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                // 단어의 길이가 같을 경우
+                if (o1.length() == o2.length()) {
+                    // 사전 순 정렬
+                    return o1.compareTo(o2);
+                } else {
+                    // 단어 길이 순 정렬
+                    return o1.length() - o2.length();
                 }
             }
-            wordLength++;
+        });
+
+        // 출력
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(arr[0]).append("\n");
+
+        for (int i = 1; i < N; i++) {
+            // 중복 아닌 단어 출력
+            if (!arr[i].equals(arr[i - 1])) {
+                sb.append(arr[i]).append("\n");
+            }
         }
+        System.out.println(sb);
 
         br.close();
     }
