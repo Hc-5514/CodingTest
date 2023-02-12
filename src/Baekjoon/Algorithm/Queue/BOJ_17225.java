@@ -37,7 +37,9 @@ public class BOJ_17225 {
         // N명의 손님이 주문한 선물 정보
         // totalCnt1: 상민이가 포장한 선물 개수
         // totalCnt2: 지수가 포장한 선물 개수
+        // lastValue1,2: 각 큐의 마지막 값
         int totalCnt1 = 0, totalCnt2 = 0;
+        int lastValue1 = 0, lastValue2 = 0;
         for (int i = 0; i < N; i++) {
             // 주문 시각, 포장지 색깔, 선물 개수
             st = new StringTokenizer(br.readLine());
@@ -48,12 +50,38 @@ public class BOJ_17225 {
             // B: 상민이가 선물 포장, R: 지수가 선물 포장
             if (color == 'B') {
                 for (int j = 0; j < orderCnt; j++) {
-                    q1.add(t + j * A);
+                    if (q1.isEmpty()) {
+                        // 첫 선물 포장일 경우
+                        q1.add(t);
+                        lastValue1 = t;
+                    } else {
+                        // 이미 포장중인 선물이 있을 경우, 해당 작업이 끝나야 시작 가능
+                        if (lastValue1 + A >= t + j * A) {
+                            lastValue1 += A;
+                            q1.add(lastValue1);
+                        } else {
+                            lastValue1 = t + j * A;
+                            q1.add(lastValue1);
+                        }
+                    }
                     totalCnt1++;
                 }
             } else {
                 for (int j = 0; j < orderCnt; j++) {
-                    q2.add(t + j * B);
+                    if (q2.isEmpty()) {
+                        // 첫 선물 포장일 경우
+                        q2.add(t);
+                        lastValue2 = t;
+                    } else {
+                        // 이미 포장중인 선물이 있을 경우, 해당 작업이 끝나야 시작 가능
+                        if (lastValue2 + B >= t + j * B) {
+                            lastValue2 += B;
+                            q2.add(lastValue2);
+                        } else {
+                            lastValue2 = t + j * B;
+                            q2.add(lastValue2);
+                        }
+                    }
                     totalCnt2++;
                 }
             }
