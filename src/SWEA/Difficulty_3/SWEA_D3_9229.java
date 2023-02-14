@@ -14,29 +14,16 @@ public class SWEA_D3_9229 {
 
     static int N, M, maxWeight;
     static int[] arr;
-    static boolean[] isSelected;
 
-    private static void getWeight(int cnt, int start) {
-
-        if (cnt == 2) {
-            int sum = 0;
-            for (int i = 0; i < isSelected.length; i++) {
-                if (isSelected[i]) {
-                    sum += arr[i];
+    private static void getWeight() {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                int sum = arr[i] + arr[j];
+                if (sum <= M) {
+                    maxWeight = Math.max(maxWeight, sum);
                 }
             }
-            if (sum <= M)
-                maxWeight = Math.max(maxWeight, sum);
-            return;
         }
-
-        for (int i = start; i < arr.length; i++) {
-            if (isSelected[i]) continue;
-            isSelected[i] = true;
-            getWeight(cnt + 1, i + 1);
-            isSelected[i] = false;
-        }
-
     }
 
     public static void main(String[] args) throws Exception {
@@ -52,14 +39,12 @@ public class SWEA_D3_9229 {
             M = Integer.parseInt(st.nextToken());
             st = new StringTokenizer(br.readLine());
             arr = new int[N];
-            isSelected = new boolean[N];
             for (int i = 0; i < N; i++) {
                 arr[i] = Integer.parseInt(st.nextToken());
             }
             // 무게 합 구하기
             maxWeight = -1;
-            getWeight(0, 0);
-
+            getWeight();
             sb.append('#').append(tc).append(" ").append(maxWeight).append("\n");
         }
 
