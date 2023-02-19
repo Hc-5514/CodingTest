@@ -14,12 +14,29 @@ import java.util.StringTokenizer;
 public class BOJ_23309 {
 
     private static class Node {
-        int no;
-        Node prev;
-        Node next;
+        int[] prev;
+        int[] next;
 
-        public Node(int no) {
-            this.no = no;
+        public Node() {
+            prev = new int[1000001];
+            next = new int[1000001];
+        }
+
+        public void add(int curStation, int newStation) {
+            // 첫 번째 역
+            if (curStation == -1) {
+                prev[newStation] = next[newStation] = newStation;
+            } else {
+                prev[newStation] = prev[curStation];
+                next[newStation] = curStation;
+                next[prev[curStation]] = newStation;
+                prev[curStation] = newStation;
+            }
+        }
+
+        public void remove(int station){
+            next[prev[station]] = next[station];
+            prev[next[station]] = prev[station];
         }
     }
 
@@ -32,62 +49,40 @@ public class BOJ_23309 {
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
 
-        // 순환 LinkedList: 기존 역 정보를 각 Node에 저장
+        // Node에 기존 역 정보 저장
         st = new StringTokenizer(br.readLine());
-        Node head = new Node(Integer.parseInt(st.nextToken()));
-        Node curNode = head;
-        Node newNode;
-        for (int i = 1; i < n; i++) {
-            int num = Integer.parseInt(st.nextToken());
-            newNode = new Node(num);
-            head.next = newNode;
-            newNode.prev = head;
-            newNode.next = curNode;
-            curNode.prev = newNode;
-            curNode = newNode;
+        Node node = new Node();
+        int curStation = -1, newStation;
+        for (int i = 0; i < n; i++) {
+            newStation = Integer.parseInt(st.nextToken());
+            node.add(curStation, newStation);
+            curStation = newStation;
         }
 
         // M번 공사 시작
-        int a, b;
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             String command = st.nextToken();
-            a = Integer.parseInt(st.nextToken());
-            while (curNode.no != a) {
-                curNode = curNode.next;
-            }
+            curStation = Integer.parseInt(st.nextToken());
             if (command.equals("BN")) {
-                // a 다음 역 번호 출력, a 다음 역에 b역 삽입
-                sb.append(curNode.prev.no).append("\n");
-                b = Integer.parseInt(st.nextToken());
-                newNode = new Node(b);
-                newNode.prev = curNode.prev;
-                newNode.next = curNode;
-                newNode.prev.next = newNode;
-                curNode.prev = newNode;
-                continue;
+                // curStation 다음 역 번호 출력, curStation 다음 역에 newStation 역 삽입
+                sb.append(node.prev[curStation]).append("\n");
+                newStation = Integer.parseInt(st.nextToken());
+                node.add(curStation, newStation);
             } else if (command.equals("BP")) {
-                // a 이전 역 번호 출력, a 이전 역에 b역 삽입
-                sb.append(curNode.next.no).append("\n");
-                b = Integer.parseInt(st.nextToken());
-                newNode = new Node(b);
-                newNode.prev = curNode;
-                newNode.next = curNode.next;
-                newNode.next.prev = newNode;
-                curNode.next = newNode;
-                continue;
+                // curStation 이전 역 번호 출력, curStation 이전 역에 newStation 역 삽입
+                sb.append(node.next[curStation]).append("\n");
+                newStation = Integer.parseInt(st.nextToken());
+                node.add(node.next[curStation], newStation);
             } else if (command.equals("CN")) {
-                // a 다음 역 폐쇄 후 번호 출력
-                sb.append(curNode.prev.no).append("\n");
-                newNode = curNode.prev;
+                // curStation 다음 역 폐쇄 후 번호 출력
+                sb.append(node.prev[curStation]).append("\n");
+                node.remove(node.prev[curStation]);
             } else {
-                // a 이전 역 폐쇄 후 번호 출력
-                sb.append(curNode.next.no).append("\n");
-                newNode = curNode.next;
+                // curStation 이전 역 폐쇄 후 번호 출력
+                sb.append(node.next[curStation]).append("\n");
+                node.remove(node.next[curStation]);
             }
-            newNode.prev.next = newNode.next;
-            newNode.next.prev = newNode.prev;
-            newNode = null;
         }
         System.out.println(sb);
         br.close();
