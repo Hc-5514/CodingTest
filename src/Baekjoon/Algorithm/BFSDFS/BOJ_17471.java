@@ -4,7 +4,7 @@
  * @author Hc-5514
  */
 
-package Baekjoon.Unclassified;
+package Baekjoon.Algorithm.BFSDFS;
 
 import java.io.BufferedReader;
 import java.io.IOException;
