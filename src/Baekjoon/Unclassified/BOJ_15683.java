@@ -129,10 +129,10 @@ public class BOJ_15683 {
         int cnt = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (copyMap[i][j] != 0) cnt++;
+                if (copyMap[i][j] == 0) cnt++;
             }
         }
-        minCnt = Math.min(minCnt, N * M - cnt);
+        minCnt = Math.min(minCnt, cnt);
     }
 
     public static void main(String[] args) throws IOException {
