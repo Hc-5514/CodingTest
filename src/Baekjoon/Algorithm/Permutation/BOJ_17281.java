@@ -4,7 +4,7 @@
  * @author Hc-5514
  */
 
-package Baekjoon.Unclassified;
+package Baekjoon.Algorithm.Permutation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-// 13시 45분
 public class BOJ_17281 {
 
     static int N, score, maxScore = 0, idx, outCnt;
