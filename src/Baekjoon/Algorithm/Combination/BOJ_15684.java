@@ -4,7 +4,7 @@
  * @author Hc-5514
  */
 
-package Baekjoon.Unclassified;
+package Baekjoon.Algorithm.Combination;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,14 +57,7 @@ public class BOJ_15684 {
             for (int i = 0; i < map.length; i++) {
                 copyMap[i] = Arrays.copyOf(map[i], map[0].length);
             }
-            // test code
-            /*System.out.println("복사 맵 출력1");
-            for (int i = 0; i < copyMap.length; i++) {
-                for (int j = 0; j < copyMap[0].length; j++) {
-                    System.out.print(copyMap[i][j] + " ");
-                }
-                System.out.println();
-            }*/
+
             // 사다리 설치 후 게임 시작
             for (int i = 0; i < visit.length; i++) {
                 if (visit[i]) {
@@ -110,15 +103,6 @@ public class BOJ_15684 {
         setCombination();
         combinationList();
         System.out.println(minCnt);
-
-        // test code: 사다리맵 출력
-        /*System.out.println("복사 맵 출력2");
-        for (int i = 0; i < copyMap.length; i++) {
-            for (int j = 0; j < copyMap[0].length; j++) {
-                System.out.print(copyMap[i][j] + " ");
-            }
-            System.out.println();
-        }*/
     }
 
     private static void setInit() throws IOException {
@@ -146,14 +130,6 @@ public class BOJ_15684 {
             int b = Integer.parseInt(st.nextToken());
             map[a][(b - 1) * 2 + 1] = 1;
         }
-
-        // test code: 사다리 세팅 확인
-        /*for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                System.out.print(map[i][j] + " ");
-            }
-            System.out.println();
-        }*/
 
         br.close();
     }
