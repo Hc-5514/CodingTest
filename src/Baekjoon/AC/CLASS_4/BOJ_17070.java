@@ -15,9 +15,9 @@ public class BOJ_17070 {
 
     static int N, totalCnt = 0;
     static int[][] board;
-    static Queue<int[]> q = new ArrayDeque<>();
+    /*static Queue<int[]> q = new ArrayDeque<>();*/
 
-    private static void bfs() {
+    /*private static void bfs() {
         // [0]: r, [1]: c, [2]: d(방향)
         // q에는 파이프의 끝 부분 좌표를 저장
         q.offer(new int[]{0, 1, 0});
@@ -41,9 +41,9 @@ public class BOJ_17070 {
                 isPossible(tmp[0], tmp[1], 2);
             }
         }
-    }
+    }*/
 
-    private static void isPossible(int r, int c, int d) {
+    /*private static void isPossible(int r, int c, int d) {
         // cmd 0: 가로, cmd 1: 세로, cmd 2: 대각선
         // 배열 범위, 설치된 벽 있는지 확인
         switch (d) {
@@ -59,6 +59,45 @@ public class BOJ_17070 {
                 if (c + 1 >= N || r + 1 >= N || board[r][c + 1] == 1 || board[r + 1][c] == 1 || board[r + 1][c + 1] == 1)
                     return;
                 q.offer(new int[]{r + 1, c + 1, d});
+                break;
+        }
+    }*/
+
+    private static void dfs(int r, int c, int d) {
+        // 파이프 끝 좌표 기준: (r,c), d:방향
+        if (r == N - 1 && c == N - 1) {
+            totalCnt++;
+            return;
+        }
+
+        if (d == 0) { // 가로
+            isPossible(r, c, 0);
+            isPossible(r, c, 2);
+        } else if (d == 1) { // 세로
+            isPossible(r, c, 1);
+            isPossible(r, c, 2);
+        } else { // 대각선
+            isPossible(r, c, 0);
+            isPossible(r, c, 1);
+            isPossible(r, c, 2);
+        }
+    }
+
+    private static void isPossible(int r, int c, int d) {
+        // 배열 범위, 설치된 벽 있는지 확인
+        switch (d) {
+            case 0: // 가로
+                if (c + 1 >= N || board[r][c + 1] == 1) return;
+                dfs(r, c + 1, d);
+                break;
+            case 1: // 세로
+                if (r + 1 >= N || board[r + 1][c] == 1) return;
+                dfs(r + 1, c, d);
+                break;
+            case 2: // 대각선
+                if (c + 1 >= N || r + 1 >= N || board[r][c + 1] == 1 || board[r + 1][c] == 1 || board[r + 1][c + 1] == 1)
+                    return;
+                dfs(r + 1, c + 1, d);
                 break;
         }
     }
@@ -77,7 +116,8 @@ public class BOJ_17070 {
             }
         }
 
-        bfs();
+        /*bfs();*/
+        dfs(0, 1, 0);
 
         bw.write(totalCnt + "\n");
         bw.flush();
