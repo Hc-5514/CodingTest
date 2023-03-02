@@ -7,7 +7,9 @@
 package SWEA.Mock_SW_Test;
 
 import java.io.*;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class SWEA_Mock_5656 {
@@ -65,6 +67,7 @@ public class SWEA_Mock_5656 {
                 int tmpR = r + dRow[i] * j;
                 int tmpC = c + dCol[i] * j;
                 if (tmpR < 0 || tmpC < 0 || tmpR >= H || tmpC >= W) continue;
+                if(copyBoard[tmpR][tmpC] == 0) continue;
                 breakWall(tmpR, tmpC);
             }
         }
@@ -72,21 +75,18 @@ public class SWEA_Mock_5656 {
 
     private static void renewalBoard() {
         // 빈 공간이 있을 경우 벽돌 아래로 내리기
+        Queue<Integer> q;
         for (int i = 0; i < W; i++) {
-            for (int j = H - 1; j > 0; j--) {
-                if (copyBoard[j][i] == 0) {
-                    int idx = 0, value = 0;
-                    while (value == 0) {
-                        idx++;
-                        // 배열 범위 밖이라면 종료
-                        if ((j - idx) == -1) break;
-                        value = copyBoard[j - idx][i];
-                    }
-                    if (value != 0) {
-                        copyBoard[j][i] = value;
-                        copyBoard[j - idx][i] = 0;
-                    }
+            q = new ArrayDeque<>();
+            for (int j = H - 1; j >= 0; j--) {
+                if (copyBoard[j][i] != 0) {
+                    q.add(copyBoard[j][i]);
+                    copyBoard[j][i] = 0;
                 }
+            }
+            int x = H - 1;
+            while (!q.isEmpty()) {
+                copyBoard[x--][i] = q.poll();
             }
         }
     }
@@ -123,8 +123,6 @@ public class SWEA_Mock_5656 {
                     board[i][j] = Integer.parseInt(st.nextToken());
                 }
             }
-
-            // 최대한 많이 제거 후 남은 벽돌 개수 구하는 문제
             minCnt = Integer.MAX_VALUE;
             combination(0);
             sb.append("#").append(tc).append(" ").append(minCnt).append("\n");
