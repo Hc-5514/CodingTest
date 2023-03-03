@@ -4,7 +4,7 @@
  * @author Hc-5514
  */
 
-package Baekjoon.Unclassified;
+package Baekjoon.Algorithm.Queue;
 
 import java.io.*;
 import java.util.ArrayList;
