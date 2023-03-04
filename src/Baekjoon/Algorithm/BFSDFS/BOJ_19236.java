@@ -18,7 +18,7 @@ public class BOJ_19236 {
     static class Shark {
         int r;
         int c;
-        int d; // ↑, ↖, ←, ↙, ↓, ↘, →, ↗ 8방향
+        int d;
     }
 
     static class Fish {
@@ -161,6 +161,7 @@ public class BOJ_19236 {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < 4; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
+                // ↑, ↖, ←, ↙, ↓, ↘, →, ↗ 8방향
                 list.add(new Fish(map[i][j], i, j, Integer.parseInt(st.nextToken()) - 1));
             }
         }
