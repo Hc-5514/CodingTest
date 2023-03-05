@@ -13,12 +13,12 @@ import java.util.StringTokenizer;
 
 public class BOJ_15651 {
 
-    static int N, M;
     static StringBuilder sb = new StringBuilder();
+    static int N, M;
     static int[] selectedNum = new int[7];
-    public static void recursion(int cnt) {
 
-        if (cnt == M) {
+    public static void permutation(int depth) {
+        if (depth == M) {
             for (int i = 0; i < M; i++) {
                 sb.append(selectedNum[i]).append(" ");
             }
@@ -27,8 +27,8 @@ public class BOJ_15651 {
         }
 
         for (int i = 1; i <= N; i++) {
-            selectedNum[cnt] = i;
-            recursion(cnt + 1);
+            selectedNum[depth] = i;
+            permutation(depth + 1);
         }
     }
 
@@ -38,10 +38,9 @@ public class BOJ_15651 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        recursion(0);
+        permutation(0);
 
         System.out.println(sb.toString());
         br.close();
     }
-
 }
