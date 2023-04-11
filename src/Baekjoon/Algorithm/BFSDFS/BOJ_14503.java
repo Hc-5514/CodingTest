@@ -39,14 +39,12 @@ public class BOJ_14503 {
                 int c = tmpC + dCol[tmpD];
                 // 배열 범위 확인
                 if (r < 0 || c < 0 || r >= N || c >= M) continue;
+                // 1. 앞쪽 칸이 0이라면 전진
                 if (board[r][c] == 0) {
-                    // 1. 반시계 방향 회전
+                    // 2. 반시계 방향 회전
                     d = tmpD;
-                    // 2. 앞쪽 칸이 0이라면 전진
-                    if (board[r][c] == 0) {
-                        q.offer(new int[]{r, c});
-                        continue w1;
-                    }
+                    q.offer(new int[]{r, c});
+                    continue w1;
                 }
             }
             // 주변 4칸 모두 청소 가능한 빈 칸이 없다면
