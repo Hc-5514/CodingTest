@@ -4,7 +4,7 @@
  * @author Hc-5514
  */
 
-package Baekjoon.Algorithm.Recursion
+package Baekjoon.Algorithm.Recursion;
 
 import java.io.BufferedReader;
 import java.io.IOException;
