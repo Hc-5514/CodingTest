@@ -6,7 +6,11 @@
 
 package Baekjoon.Algorithm.BinarySearch;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class BOJ_2343 {
@@ -29,11 +33,11 @@ public class BOJ_2343 {
 		}
 
 		int s = longestLesson;
-		int e = 100000;
+		int e = 1000000;
 
 		while (s <= e) {
 			int m = (s + e) >> 1;
-			int cnt = 1;
+			int cnt = 0;
 			int sum = 0;
 			for (int i = 0; i < N; i++) {
 				sum += lesson[i];
@@ -41,8 +45,9 @@ public class BOJ_2343 {
 					sum = lesson[i];
 					cnt++;
 				}
-				if (cnt > m)
-					break;
+			}
+			if (sum != 0) {
+				cnt++;
 			}
 			if (cnt > M) {
 				s = m + 1;
