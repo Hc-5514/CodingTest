@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class BOJ_9019 {
@@ -22,10 +22,10 @@ public class BOJ_9019 {
 	private static int goal;
 
 	private static String bfs(Command command) {
-		Map<Integer, Integer> map = new HashMap<>(); // 중복수 명령어 수행 방지
+		Set<Integer> set = new HashSet<>(); // 중복수 명령어 수행 방지
 		Queue<Command> q = new ArrayDeque<>();
 		q.offer(command);
-		map.put(command.n, command.cmdOrder.length());
+		set.add(command.n);
 
 		while (!q.isEmpty()) {
 			Command cur = q.poll();
@@ -34,30 +34,29 @@ public class BOJ_9019 {
 			}
 
 			int result = command(cur.n, 'D');
-			if (map.get(result) == null || cur.cmdOrder.length() + 1 < map.get(result)) {
+			if (!set.contains(result)) {
 				q.offer(new Command(result, cur.cmdOrder + 'D'));
-				map.put(result, cur.cmdOrder.length() + 1);
+				set.add(result);
 			}
 
 			result = command(cur.n, 'S');
-			if (map.get(result) == null || cur.cmdOrder.length() + 1 < map.get(result)) {
+			if (!set.contains(result)) {
 				q.offer(new Command(result, cur.cmdOrder + 'S'));
-				map.put(result, cur.cmdOrder.length() + 1);
+				set.add(result);
 			}
 
 			result = command(cur.n, 'L');
-			if (map.get(result) == null || cur.cmdOrder.length() + 1 < map.get(result)) {
+			if (!set.contains(result)) {
 				q.offer(new Command(result, cur.cmdOrder + 'L'));
-				map.put(result, cur.cmdOrder.length() + 1);
+				set.add(result);
 			}
 
 			result = command(cur.n, 'R');
-			if (map.get(result) == null || cur.cmdOrder.length() + 1 < map.get(result)) {
+			if (!set.contains(result)) {
 				q.offer(new Command(result, cur.cmdOrder + 'R'));
-				map.put(result, cur.cmdOrder.length() + 1);
+				set.add(result);
 			}
 		}
-
 		return "";
 	}
 
