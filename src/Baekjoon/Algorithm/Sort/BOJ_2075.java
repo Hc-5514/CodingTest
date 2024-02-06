@@ -33,7 +33,7 @@ public class BOJ_2075 {
 			}
 		}
 
-		Collections.sort(list, ((o1, o2) -> o2 - o1));
+		Collections.sort(list, Collections.reverseOrder());
 
 		bw.write(list.get(N - 1) + "\n");
 		bw.flush();
