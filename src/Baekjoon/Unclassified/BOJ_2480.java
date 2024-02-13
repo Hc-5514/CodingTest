@@ -24,8 +24,8 @@ public class BOJ_2480 {
 		int n2 = Integer.parseInt(st.nextToken());
 		int n3 = Integer.parseInt(st.nextToken());
 
-		int result = 0;
-		if (n1 == n2 && n2 == n3 && n3 == n1) {
+		int result;
+		if (n2 == n3 && n3 == n1) {
 			result = 10000 + n1 * 1000;
 		} else if (n1 == n2 || n2 == n3) {
 			result = 1000 + n2 * 100;
