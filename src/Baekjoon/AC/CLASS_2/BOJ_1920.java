@@ -7,36 +7,54 @@
 package Baekjoon.AC.CLASS_2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 public class BOJ_1920 {
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
+		// init
+		int N = Integer.parseInt(br.readLine());
+		int[] nums = Stream.of(br.readLine().split(" "))
+			.mapToInt(Integer::parseInt)
+			.toArray();
 
-        int N = Integer.parseInt(br.readLine());
-        int[] arr = new int[N];
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
+		int M = Integer.parseInt(br.readLine());
+		int[] findNums = Stream.of(br.readLine().split(" "))
+			.mapToInt(Integer::parseInt)
+			.toArray();
 
-        Arrays.sort(arr);
+		// sort
+		Arrays.sort(nums); // 1 2 3 4 5
 
-        int M = Integer.parseInt(br.readLine());
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < M; i++) {
-            if (Arrays.binarySearch(arr, Integer.parseInt(st.nextToken())) >= 0)
-                sb.append(1);
-            else sb.append(0);
-            sb.append("\n");
-        }
-        System.out.println(sb);
-    }
+		// binary search
+		for (int i = 0; i < M; i++) {
+			int s = 0;
+			int e = N - 1;
+			while (s < e) {
+				int m = (s + e) >> 1;
+				if (nums[m] < findNums[i]) {
+					s = m + 1;
+				} else {
+					e = m;
+				}
+			}
+			if (nums[s] == findNums[i]) {
+				bw.write(1 + "\n");
+			} else {
+				bw.write(0 + "\n");
+			}
+		}
+
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 }
