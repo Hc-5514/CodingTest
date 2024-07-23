@@ -18,24 +18,28 @@ import java.util.StringTokenizer;
 
 public class BOJ_2075 {
 
+	// NxN 보드에서 N번째 큰 수 찾기
+	// 모든 수는 자신의 한 칸 위에 있는 수보다 크다.
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 
 		int N = Integer.parseInt(br.readLine().trim());
-		List<Integer> list = new ArrayList<>(N * N);
 
+		List<Integer> nums = new ArrayList<>();
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < N; j++) {
-				list.add(Integer.parseInt(st.nextToken()));
+				nums.add(Integer.parseInt(st.nextToken()));
 			}
 		}
 
-		Collections.sort(list, Collections.reverseOrder());
+		Collections.sort(nums, Collections.reverseOrder());
 
-		bw.write(list.get(N - 1) + "\n");
+		int result = nums.get(N - 1);
+		bw.write(result + "\n");
 		bw.flush();
 		bw.close();
 		br.close();
