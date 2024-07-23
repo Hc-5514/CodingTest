@@ -12,12 +12,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
-
-/**
- * 문제 잘 읽기 !!!!!!!!!!
- */
+import java.util.stream.Stream;
 
 public class BOJ_1806 {
+
+	// 연속된 수들의 부분합 중에서 그 합이 S 이상이 되는 것 중, 가장 짧은 길이 구하기
+	// 만족하는 부분합이 없다면, 0출력
+
+	// 투 포인터를 이용한 누적합 문제
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,37 +27,32 @@ public class BOJ_1806 {
 		StringTokenizer st;
 
 		st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken()); // 10 <= N < 100,000 (N의 크기는 10,000 이하)
+		int N = Integer.parseInt(st.nextToken()); // 10 <= N < 100,000
 		int S = Integer.parseInt(st.nextToken()); // 0 < S <= 100,000,000
 
-		int[] numArr = new int[N]; // 수열 저장
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
-			numArr[i] = Integer.parseInt(st.nextToken());
-		}
+		int[] nums = Stream.of(br.readLine().split(" "))
+			.mapToInt(Integer::parseInt)
+			.toArray();
 
-		// 연속된 수들의 부분 합이 S "이상"이 되는것 중, 가장 짧은 길이 구하기
-		// 투 포인터: 합이 S보다 크다면 left 이동, 작다면 right 이동
-		int minLen = Integer.MAX_VALUE;
+		// 투 포인터
+		int minLen = 1_000_000;
 		int left = 0;
 		int sum = 0;
 
 		for (int right = 0; right < N; right++) {
-			sum += numArr[right];
+			sum += nums[right];
 
-			while (left < right && S <= sum - numArr[left]) {
-				sum -= numArr[left++];
+			while (left <= right && S <= sum - nums[left]) {
+				sum -= nums[left++];
 			}
 
+			// 길이 최소값 갱신
 			if (S <= sum) {
-				minLen = Math.min(minLen, right - left + 1);
+				minLen = Math.min(minLen, (right - left + 1));
 			}
 		}
 
-		if (minLen == Integer.MAX_VALUE) {
-			minLen = 0;
-		}
-
+		minLen = (minLen == 1_000_000) ? 0 : minLen; // 만족하는 부분합이 없다면 0출력
 		bw.write(minLen + "\n");
 		bw.flush();
 		bw.close();
