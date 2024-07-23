@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
-import java.util.stream.Stream;
 
 public class BOJ_1806 {
 
@@ -30,9 +29,11 @@ public class BOJ_1806 {
 		int N = Integer.parseInt(st.nextToken()); // 10 <= N < 100,000
 		int S = Integer.parseInt(st.nextToken()); // 0 < S <= 100,000,000
 
-		int[] nums = Stream.of(br.readLine().split(" "))
-			.mapToInt(Integer::parseInt)
-			.toArray();
+		int[] nums = new int[N];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			nums[i] = Integer.parseInt(st.nextToken());
+		}
 
 		// 투 포인터
 		int minLen = 1_000_000;
@@ -59,15 +60,3 @@ public class BOJ_1806 {
 		br.close();
 	}
 }
-
-/*
-	*** 반례 ***
-
-	1) 답: 1
-	5 10
-	1 1 1 8 10
-
-	2) 답: 10
-	10 10
-	1 1 1 1 1 1 1 1 1 1
- */
