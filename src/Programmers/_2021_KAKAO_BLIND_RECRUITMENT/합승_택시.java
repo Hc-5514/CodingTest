@@ -1,5 +1,5 @@
 /**
- * 문제 : 합승 택시 요금
+ * 문제 : 합승 택시
  *
  * @author Hc-5514
  */
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class 합승_택시_요금 {
+public class 합승_택시 {
 
 	class Solution {
 
