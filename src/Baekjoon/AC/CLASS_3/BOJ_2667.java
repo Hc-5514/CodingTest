@@ -7,86 +7,87 @@
 package Baekjoon.AC.CLASS_3;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Queue;
 
 public class BOJ_2667 {
 
-    static int n;
+	private static int N;
+	private static final int[] dRow = {-1, 1, 0, 0}, dCol = {0, 0, -1, 1};
+	private static int[][] board;
+	private static boolean[][] visit;
 
-    static int[] dx = new int[]{-1, 0, 1, 0};
+	private static int bfs(int sr, int sc) {
+		Queue<int[]> q = new ArrayDeque<>();
+		q.offer(new int[] {sr, sc});
+		visit[sr][sc] = true;
+		int cnt = 1;
 
-    static int[] dy = new int[]{0, 1, 0, -1};
+		while (!q.isEmpty()) {
+			int[] cur = q.poll();
 
-    static int[][] map;
+			for (int k = 0; k < 4; k++) {
+				int r = cur[0] + dRow[k];
+				int c = cur[1] + dCol[k];
+				// 범위 확인
+				if (r < 0 || c < 0 || r >= N || c >= N) {
+					continue;
+				}
+				// 단지 & 방문 확인
+				if (board[r][c] == 0 || visit[r][c]) {
+					continue;
+				}
+				q.offer(new int[] {r, c});
+				visit[r][c] = true;
+				cnt++;
+			}
+		}
 
-    static boolean[][] visit;
+		return cnt;
+	}
 
-    static List<Integer> list = new ArrayList<>();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-    private static class coordinate {
-        int x;
-        int y;
+		N = Integer.parseInt(br.readLine().trim());
+		board = new int[N][N];
+		visit = new boolean[N][N];
 
-        public coordinate(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+		for (int i = 0; i < N; i++) {
+			String line = br.readLine();
+			for (int j = 0; j < N; j++) {
+				board[i][j] = Character.getNumericValue(line.charAt(j));
+			}
+		}
 
-    private static void bfs() {
-        Queue<coordinate> q = new LinkedList<>();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (map[i][j] == 1 && !visit[i][j]) {
-                    q.offer(new coordinate(i, j));
-                    visit[i][j] = true;
-                    int cnt =1;
-                    while (!q.isEmpty()) {
-                        coordinate tmp = q.poll();
-                        // 상하좌우 탐색
-                        for (int k = 0; k < 4; k++) {
-                            int x = tmp.x + dx[k];
-                            int y = tmp.y + dy[k];
-                            if (x < 0 || y < 0 || x >= n || y >= n) continue;
-                            if (map[x][y] == 1 && !visit[x][y]) {
-                                q.offer(new coordinate(x, y));
-                                visit[x][y] = true;
-                                map[x][y] = map[tmp.x][tmp.y] + 1;
-                                cnt++;
-                            }
-                        }
-                    }
-                    list.add(cnt);
-                }
-            }
-        }
-    }
+		List<Integer> counts = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if (visit[i][j] || board[i][j] == 0) {
+					continue;
+				}
+				counts.add(bfs(i, j));
+			}
+		}
 
-        // n x n 배열
-        n = Integer.parseInt(br.readLine());
-        map = new int[n][n];
-        visit = new boolean[n][n];
-        for (int i = 0; i < n; i++) {
-            String str = br.readLine();
-            for (int j = 0; j < n; j++) {
-                map[i][j] = str.charAt(j) - '0';
-            }
-        }
+		Collections.sort(counts);
 
-        bfs();
+		bw.write(counts.size() + "\n");
+		for (int cnt : counts) {
+			bw.write(cnt + "\n");
+		}
 
-        sb.append(list.size()).append("\n");
-        Collections.sort(list);
-        for (int n : list)
-            sb.append(n).append("\n");
-
-        System.out.println(sb);
-        br.close();
-    }
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 }
