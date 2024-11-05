@@ -7,77 +7,78 @@
 package Baekjoon.Algorithm.Queue;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class BOJ_13335 {
 
-	static Queue<Integer> q = new LinkedList<>();
-	static int[] arrWeight;
-
-	private static int getWeight() {
-
-		int weight = 0;
-
-		for (Integer n : q) {
-			weight += arrWeight[n];
-		}
-
-		return weight;
-	}
-
 	public static void main(String[] args) throws IOException {
-
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 
-		// n: 트럭의 수, w: 다리의 길이, L: 다리의 최대 하중
 		st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
-		int w = Integer.parseInt(st.nextToken());
-		int L = Integer.parseInt(st.nextToken());
+		int n = Integer.parseInt(st.nextToken()); // 트럭 수
+		int w = Integer.parseInt(st.nextToken()); // 다리 길이
+		int l = Integer.parseInt(st.nextToken()); // 다리 최대 하중
 
-		// 각 트럭의 무게 입력 받기
-		arrWeight = new int[n];
 		st = new StringTokenizer(br.readLine());
+		int[] trucks = new int[n];
 		for (int i = 0; i < n; i++) {
-			arrWeight[i] = Integer.parseInt(st.nextToken());
+			trucks[i] = Integer.parseInt(st.nextToken());
 		}
 
-		// 모든 트럭이 다리를 건너는 최단 시간 계산
-		int time = 1;
+		// int[] trucks = Stream.of(br.readLine().split(" "))
+		// 	.mapToInt(Integer::parseInt)
+		// 	.toArray();
 
-		// 트럭이 다리 위에 올라간 시간을 저장할 배열
-		int[] arrTime = new int[n];
-		int cnt = 0;
-		q.add(cnt);
-		arrTime[cnt] = time;
+		int time = 1; // 소요 시간, 1초부터 트럭 이동
+		int idx = 0; // 현재 트럭 idx
+		int weight = trucks[idx]; // 현재 다리 하중
+		Queue<Truck> q = new ArrayDeque<>(); // 다리 위에 있는 트럭
+		q.offer(new Truck(trucks[idx], time + w)); // 트럭 무게, 트럭이 다리를 빠져나올 시간을 저장
+		idx++;
 
-		while (!q.isEmpty()) {
-
+		// 모든 트럭이 지나갈 때까지
+		while (idx < n) {
 			time++;
 
-			// 트럭이 다리 위에 올라간 뒤 w초 후에 지나감
-			if ((arrTime[q.peek()] + w) == time) {
-				q.poll();
+			// 트럭이 지나갈 수 있는지
+			if (!q.isEmpty() && q.peek().t == time) {
+				Truck truck = q.poll();
+				weight -= truck.w;
 			}
 
-			// 한 번에 w대만 올라갈 수 있음 & 다리 위에 올라간 트럭의 무게 총 합 <= L
-			if ((q.size() < w) && cnt + 1 < n && ((getWeight() + arrWeight[cnt + 1]) <= L)) {
-				// Queue에 트럭을 추가 후, 들어간 시간 저장
-				cnt++;
-				q.add(cnt);
-				arrTime[cnt] = time;
-
+			// 최대 다리 길이만큼 올라갈 수 있음, 현재 하중 + 새 트럭 무게 <= 다리 최대 하중
+			if (q.size() < w && weight + trucks[idx] <= l) {
+				q.offer(new Truck(trucks[idx], time + w));
+				weight += trucks[idx];
+				idx++;
 			}
 		}
 
-		// 출력
-		System.out.println(time);
+		while (!q.isEmpty()) {
+			time = q.poll().t;
+		}
+
+		bw.write(time + "\n");
+		bw.flush();
+		bw.close();
 		br.close();
 	}
 
+	private static class Truck {
+		int w; // 트럭 무게
+		int t; // 다리 빠져나올 시간
+
+		public Truck(int w, int t) {
+			this.w = w;
+			this.t = t;
+		}
+	}
 }
