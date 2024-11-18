@@ -7,40 +7,46 @@
 package Baekjoon.AC.CLASS_2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class BOJ_1929 {
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
 
-        // M이상 N이하 소수 구하기
-        int M = Integer.parseInt(st.nextToken());
-        int N = Integer.parseInt(st.nextToken());
+		boolean[] isPrime = new boolean[1_000_001];
+		Arrays.fill(isPrime, true);
+		isPrime[0] = isPrime[1] = false;
 
-        // 0 ~ N 범위 배열 선언
-        boolean[] arr = new boolean[N + 1];
+		for (int i = 2; i <= Math.sqrt(1_000_000); i++) {
+			if (!isPrime[i]) {
+				continue;
+			}
+			for (int j = i * i; j <= 1_000_000; j += i) {
+				if (isPrime[j]) {
+					isPrime[j] = false;
+				}
+			}
+		}
 
-        // 소수 판별하기 (에라토스테네스의 체)
-        // 소수: false, 소수가 아니면: true
-        arr[0] = arr[1] = true;
-        for (int i = 2; i <= Math.sqrt(N); i++) {
-            if(arr[i]) continue;
-            for (int j = i*i; j <= N; j+=i) {
-                arr[j] = true;
-            }
-        }
+		for (int i = n; i <= m; i++) {
+			if (isPrime[i]) {
+				bw.write(i + "\n");
+			}
+		}
 
-        for (int i = M; i < N + 1; i++) {
-            if (!arr[i]) sb.append(i).append("\n");
-        }
-
-        System.out.println(sb);
-        br.close();
-    }
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 }
