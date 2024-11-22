@@ -6,59 +6,59 @@
 
 package Baekjoon.AC.CLASS_3;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
+
 public class BOJ_1931 {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
 
-        int N = Integer.parseInt(br.readLine().trim());
-        ArrayList<Room> list = new ArrayList<>();
+		// n개의 회의 정보 저장
+		PriorityQueue<Meeting> pq = new PriorityQueue<>();
+		int n = Integer.parseInt(br.readLine().trim());
+		for (int i = 0; i < n; i++) {
+			st = new StringTokenizer(br.readLine());
+			pq.add(new Meeting(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+		}
 
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            list.add(new Room(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
-        }
+		int cnt = 1;
+		int endTime = pq.poll().end;
+		while (!pq.isEmpty()) {
+			Meeting cur = pq.poll();
+			if (endTime <= cur.start) {
+				endTime = cur.end;
+				cnt++;
+			}
+		}
 
-        Collections.sort(list, new Comparator<Room>() {
-            @Override
-            public int compare(Room o1, Room o2) {
-                if(o1.end == o2.end)
-                    return o1.start - o2.start;
-                return o1.end - o2.end;
-            }
-        });
+		bw.write(cnt + "\n");
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 
-        int cnt = 1;
-        int lastEnd = list.get(0).end;
-        for (int i = 1; i < list.size(); i++) {
-            if(list.get(i).start >= lastEnd){
-                cnt++;
-                lastEnd = list.get(i).end;
-            }
-        }
+	private static class Meeting implements Comparable<Meeting> {
+		int start;
+		int end;
 
-        bw.write(cnt + "\n");
-        bw.flush();
-        bw.close();
-        br.close();
-    }
+		public Meeting(int start, int end) {
+			this.start = start;
+			this.end = end;
+		}
 
-    static class Room {
-        int start;
-        int end;
-        int sub;
-
-        public Room(int start, int end) {
-            this.start = start;
-            this.end = end;
-            this.sub = end - start;
-        }
-    }
+		public int compareTo(Meeting m) {
+			if (this.end == m.end) {
+				return this.start - m.start;
+			}
+			return this.end - m.end;
+		}
+	}
 }
