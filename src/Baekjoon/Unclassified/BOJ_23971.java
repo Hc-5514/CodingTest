@@ -23,7 +23,7 @@ public class BOJ_23971 {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
 		int[] info = Stream.of(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-		int result = (1+(info[0]-1)/(info[2]+1)) * (1+(info[1]-1)/(info[3]+1));
+		int result = (1 + (info[0] - 1) / (info[2] + 1)) * (1 + (info[1] - 1) / (info[3] + 1));
 
 		bw.write(result + "\n");
 		bw.flush();
