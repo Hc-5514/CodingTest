@@ -1,52 +1,51 @@
 /**
- * 문제 : 괄호
- *
- * @author Hc-5514
+ * 문제: 괄호
+ * 난이도: 실버 4
+ * 메모리: 11744KB, 시간: 72ms
+ * 풀이: 자료구조 Stack
  */
 
 package Baekjoon.AC.CLASS_2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Stack;
 
 public class BOJ_9012 {
 
-	public static void main(String[] args) throws Exception {
-
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int T = Integer.parseInt(br.readLine());
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-		for (int tc = 1; tc <= T; tc++) {
-
-			Stack<Character> stack = new Stack<>();
+		int t = Integer.parseInt(br.readLine().trim());
+		while (t-- > 0) {
+			Stack<Character> st = new Stack<>();
 			boolean isVPS = true;
 
-			String str = br.readLine();
-			for (int i = 0; i < str.length(); i++) {
-				if (str.charAt(i) == '(') {
-					stack.push(str.charAt(i));
+			String inputString = br.readLine();
+			for (int i = 0; i < inputString.length(); i++) {
+				char c = inputString.charAt(i);
+				if (c == '(') {
+					st.push(c);
+				} else if (st.isEmpty()) {
+					isVPS = false;
+					break;
 				} else {
-					if (!stack.empty())
-						stack.pop();
-					else {
-						isVPS = false;
-						break;
-					}
-
+					st.pop();
 				}
-
 			}
-
-			if (isVPS) {
-				if (stack.empty()) {
-					System.out.println("YES");
-				} else
-					System.out.println("NO");
-			} else
-				System.out.println("NO");
-
+			if (st.isEmpty() && isVPS) {
+				bw.write("YES\n");
+			} else {
+				bw.write("NO\n");
+			}
 		}
-	}
 
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 }
