@@ -1,8 +1,10 @@
 /**
  * 문제: 이분 그래프
  * 난이도: 골드 4
- * 메모리: 285708KB, 시간: 956ms
+ * 메모리: 284636KB, 시간: 856ms
  * 풀이: BFS
+ * 메모리: 282716KB, 시간: 844ms
+ * 풀이: DFS
  */
 
 package Baekjoon.Algorithm.BFSDFS;
@@ -25,12 +27,9 @@ public class BOJ_1707 {
 	private static boolean[] checkNode, visit;
 	private static List<List<Integer>> nodeList;
 
-	private static boolean bfs(int startNo) {
+	private static boolean bfs(Node startNode) {
 		Queue<Node> q = new ArrayDeque<>();
-		q.offer(new Node(startNo, true));
-		visit[startNo] = true;
-		checkNode[startNo] = true;
-
+		q.offer(startNode);
 		while (!q.isEmpty()) {
 			Node pollNode = q.poll();
 			for (int i = 0; i < nodeList.get(pollNode.no).size(); i++) {
@@ -46,6 +45,26 @@ public class BOJ_1707 {
 				checkNode[curNo] = !pollNode.checkNode;
 				q.offer(new Node(curNo, checkNode[curNo]));
 				visit[curNo] = true;
+			}
+		}
+		return true;
+	}
+
+	private static boolean dfs(Node startNode) {
+		for (int i = 0; i < nodeList.get(startNode.no).size(); i++) {
+			int curNo = nodeList.get(startNode.no).get(i);
+			// 인접 노드가 같은 집합에 속한지 확인
+			if (visit[curNo]) {
+				if (checkNode[curNo] == startNode.checkNode) {
+					return false;
+				}
+			} else {
+				// 인접 노드는 다른 집합에 분류
+				checkNode[curNo] = !startNode.checkNode;
+				visit[curNo] = true;
+				if (!dfs(new Node(curNo, checkNode[curNo]))) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -81,14 +100,21 @@ public class BOJ_1707 {
 
 			boolean isBipartiteGraph = true;
 
-			// bfs
 			visit = new boolean[v + 1];
 
 			for (int i = 1; i <= v; i++) {
 				if (visit[i]) {
 					continue;
 				}
-				if (!bfs(i)) {
+				visit[i] = true;
+				checkNode[i] = true;
+				// bfs
+				if (!bfs(new Node(i, true))) {
+					isBipartiteGraph = false;
+					break;
+				}
+				// dfs
+				if (!dfs(new Node(i, true))) {
 					isBipartiteGraph = false;
 					break;
 				}
