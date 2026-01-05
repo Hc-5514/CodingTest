@@ -1,59 +1,41 @@
 /**
- * 문제 : 1,2,3 더하기
- *
- * @author Hc-5514
+ * 문제: 1, 2, 3 더하기
+ * 난이도: 실버 3
+ * 메모리: 11528KB, 시간: 64ms
+ * 풀이: DP
  */
 
 package Baekjoon.AC.CLASS_3;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class BOJ_9095 {
 
-    public static int[] arr;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-    public static int dp(int num) {
+		int[] dp = new int[11];
+		dp[1] = 1;
+		dp[2] = 2;
+		dp[3] = 4;
 
-        if (arr[num] != 0)
-            return arr[num];
-        else {
-            if (arr[num - 3] != 0 && arr[num - 2] != 0 && arr[num - 1] != 0) {
-                arr[num] = arr[num - 3] + arr[num - 2] + arr[num - 1];
-                return arr[num];
-            } else
-                return dp(num - 3) + dp(num - 2) + dp(num - 1);
-        }
-    }
+		for (int i = 4; i < dp.length; i++) {
+			dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
+		}
 
-    public static void main(String[] args) throws IOException {
+		int t = Integer.parseInt(br.readLine());
+		while (t-- > 0) {
+			int n = Integer.parseInt(br.readLine());
+			bw.write(dp[n] + "\n");
+		}
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine());
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int tc = 1; tc <= T; tc++) {
-            int n = Integer.parseInt(br.readLine());
-
-            if (n < 4) {
-                if (n == 3) {
-                    sb.append(4).append("\n");
-                } else {
-                    sb.append(n).append("\n");
-                }
-                continue;
-            } else {
-                arr = new int[n + 1];
-                arr[1] = 1;
-                arr[2] = 2;
-                arr[3] = 4;
-            }
-
-            sb.append(dp(n)).append("\n");
-        }
-        System.out.println(sb);
-        br.close();
-    }
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 }
