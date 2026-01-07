@@ -1,12 +1,17 @@
 /**
- * 문제 : 가장 긴 증가하는 부분 수열
- *
- * @author Hc-5514
+ * 문제: 가장 긴 증가하는 부분 수열
+ * 난이도: 실버 2
+ * 메모리: 12524KB, 시간: 92ms
+ * 풀이: DP
  */
 
 package Baekjoon.AC.CLASS_4;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 /**
@@ -17,35 +22,37 @@ import java.util.StringTokenizer;
 
 public class BOJ_11053 {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
 
-        int N = Integer.parseInt(br.readLine().trim());
-        int[] numArr = new int[N];
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            numArr[i] = Integer.parseInt(st.nextToken());
-        }
+		int n = Integer.parseInt(br.readLine()); // 1 <= n <= 1_000
+		int[] nums = new int[n];
+		int[] dp = new int[n]; // i 번째 원소를 포함하여 가장 긴 증가하는 부분 수열 길이
 
-        int maxLen = 0;
-        int[] dp = new int[N];
-        for (int i = 0; i < N; i++) {
-            int maxDP = 0;
-            for (int j = 0; j < i; j++) {
-                if (numArr[j] < numArr[i]) {
-                    if (maxDP < dp[j]) maxDP = dp[j];
-                }
-            }
-            dp[i] = maxDP + 1;
-            if (maxLen < dp[i]) maxLen = dp[i];
-        }
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < nums.length; i++) {
+			nums[i] = Integer.parseInt(st.nextToken()); // 1 <= nums[i] <= 1_000
+			dp[i] = 1;
+		}
 
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < i; j++) {
+				if (nums[j] < nums[i]) {
+					dp[i] = Math.max(dp[i], dp[j] + 1);
+				}
+			}
+		}
 
-        bw.write(maxLen + "\n");
-        bw.flush();
-        bw.close();
-        br.close();
-    }
+		int result = 0;
+		for (int i = 0; i < n; i++) {
+			result = Math.max(result, dp[i]);
+		}
+
+		bw.write(result + "\n");
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 }
