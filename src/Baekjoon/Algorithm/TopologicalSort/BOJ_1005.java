@@ -1,7 +1,8 @@
 /**
- * 문제 : ACM Craft
- *
- * @author Hc-5514
+ * 문제: ACM Craft
+ * 난이도: 골드 3
+ * 메모리: 253896KB, 시간: 1016ms
+ * 풀이: 위상 정렬
  */
 
 package Baekjoon.Algorithm.TopologicalSort;
@@ -17,9 +18,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-/**
- * 순서가 정해진 작업을 처리 -> 위상 정렬 문제 (비순환 유향 그래프)
- */
 public class BOJ_1005 {
 
 	public static void main(String[] args) throws IOException {
@@ -28,62 +26,57 @@ public class BOJ_1005 {
 		StringTokenizer st;
 
 		int T = Integer.parseInt(br.readLine().trim()); // T: 테케 수
-		for (int tc = 0; tc < T; tc++) {
+		while (T-- > 0) {
 			st = new StringTokenizer(br.readLine());
-			int N = Integer.parseInt(st.nextToken()); // N: 건물 개수 (1~N)
-			int K = Integer.parseInt(st.nextToken()); // K: 건설 순서 규칙
+			int N = Integer.parseInt(st.nextToken()); // 건물 개수 (2 <= N <= 1_000)
+			int K = Integer.parseInt(st.nextToken()); // 규칙 개수 (1 <= K <= 100_000)
 
-			// 건물당 건설 소요 시간
-			int[] work_time = new int[N + 1];
 			st = new StringTokenizer(br.readLine());
+			int[] times = new int[N + 1]; // 건설 소요 시간
+			int[] indegree = new int[N + 1]; // 전입 차수 개수
 			for (int i = 1; i <= N; i++) {
-				work_time[i] = Integer.parseInt(st.nextToken());
+				times[i] = Integer.parseInt(st.nextToken());
 			}
 
-			// 건물 순서
-			List<List<Integer>> buildings = new ArrayList<>();
+			// 전입 차수 관리
+			List<List<Integer>> graph = new ArrayList<>();
 			for (int i = 0; i <= N; i++) {
-				buildings.add(new ArrayList<>());
+				graph.add(new ArrayList<>());
 			}
 
-			// 전입 차수
-			int[] edgeCnt = new int[N + 1];
-
-			// 양방향 연결
+			// 건설 순서 X->Y
 			for (int i = 0; i < K; i++) {
 				st = new StringTokenizer(br.readLine());
-				int from = Integer.parseInt(st.nextToken());
-				int to = Integer.parseInt(st.nextToken());
-				buildings.get(from).add(to);
-				edgeCnt[to]++;
+				int X = Integer.parseInt(st.nextToken());
+				int Y = Integer.parseInt(st.nextToken());
+				graph.get(X).add(Y);
+				indegree[Y]++;
 			}
 
-			int W = Integer.parseInt(br.readLine().trim()); // 목표 건설 건물 번호
+			int W = Integer.parseInt(br.readLine().trim()); // 목표 건물 번호
 
-			int[] building_time = new int[N + 1]; // 건물 건설 소요 시간
-
-			// 건설의 기본 소요 시간은 work_time[i]
+			int[] dp = new int[N + 1];
 			Queue<Integer> q = new ArrayDeque<>();
+
+			// 전입 차수가 0인 건물 추가
 			for (int i = 1; i <= N; i++) {
-				building_time[i] = work_time[i];
-				if (edgeCnt[i] == 0) {
+				if (indegree[i] == 0) {
 					q.offer(i);
+					dp[i] = times[i];
 				}
 			}
 
-			// 건설 총 소요 시간 = 현재 건물 건설 소요 시간 + 이전 건물 건설 소요 시간
 			while (!q.isEmpty()) {
 				int cur = q.poll();
-				for (int n : buildings.get(cur)) {
-					building_time[n] = Math.max(building_time[n], work_time[n] + building_time[cur]);
-					edgeCnt[n]--;
-					if (edgeCnt[n] == 0) {
-						q.offer(n);
+				for (int next : graph.get(cur)) {
+					dp[next] = Math.max(dp[next], dp[cur] + times[next]);
+					if (--indegree[next] == 0) {
+						q.offer(next);
 					}
 				}
 			}
 
-			bw.write(building_time[W] + "\n");
+			bw.write(dp[W] + "\n");
 		}
 
 		bw.flush();
