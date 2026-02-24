@@ -1,87 +1,81 @@
 /**
- * 문제 : 트리
- *
- * @author Hc-5514
+ * 문제: 트리
+ * 난이도: 골드 5
+ * 메모리: 11652KB, 시간: 68ms
+ * 풀이: DFS
  */
 
 package Baekjoon.Algorithm.BFSDFS;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class BOJ_1068 {
 
-    private static int n, leafCnt = 0;
+	private static int N;
+	private static int[] parents; // 부모 노드 번호
+	private static int[] childCnt; // 자식 노드 개수
 
-    private static int[] node;
+	private static void removeNode(int rmNo) {
+		// 부모 노드가 루트 노드가 아닐 경우
+		int parentNo = parents[rmNo];
+		if (parentNo != -1) {
+			childCnt[parentNo]--;
+		}
+		// 부모, 자식 노드 정보 제거
+		parents[rmNo] = -1;
+		childCnt[rmNo] = -1;
 
-    private static void removeNode(int removeNum) {
-        // n번 노드 제거
-        node[removeNum] = -2;
-        // n번 노드를 부모로 가지는 자식 노드 제거
-        for (int i = 0; i < n; i++) {
-            if (node[i] == removeNum) {
-                removeNode(i);
-            }
-        }
-    }
+		for (int i = 0; i < N; i++) {
+			if (parents[i] == rmNo) {
+				removeNode(i);
+			}
+		}
+	}
 
-    private static void dfs(int head) {
-        // 자식 노드가 있을 때, 리프 노드가 아니면 -2로 값을 바꾼다.
-        for (int i = 0; i < n; i++) {
-            // 자식 노드일 때
-            if (node[i] == head) {
-                // 리프 노드 확인 (cnt: 자식 노드 개수)
-                int cnt = 0;
-                for (int j = 0; j < n; j++) {
-                    if (node[j] == i)
-                        cnt++;
-                }
-                // 리프 노드가 아니면 -2
-                if (cnt != 0) {
-                    node[i] = -2;
-                    dfs(i);
-                }
-            }
-        }
-    }
+	private static int getLeafNodeCnt() {
+		int total = 0;
+		for (int i = 0; i < N; i++) {
+			if (parents[i] != -1 && childCnt[i] == 0) {
+				total++;
+			}
+		}
+		return total;
+	}
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
 
-        n = Integer.parseInt(br.readLine());
-        node = new int[n];
+		N = Integer.parseInt(br.readLine()); // 노드 개수, 1 <= N <= 50
+		parents = new int[N];
+		childCnt = new int[N];
 
-        st = new StringTokenizer(br.readLine());
-        int headNode = 0;
-        for (int i = 0; i < n; i++) {
-            node[i] = Integer.parseInt(st.nextToken());
-            if (node[i] == -1) headNode = i;
-        }
+		// 입력: 부모 노드 번호, 자식 노드 개수
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			int cur = Integer.parseInt(st.nextToken());
+			parents[i] = cur;
+			if (cur == -1) {
+				continue;
+			}
+			childCnt[cur]++;
+		}
 
-        // 노드 제거
-        removeNode(Integer.parseInt(br.readLine()));
+		int R = Integer.parseInt(br.readLine()); // 지울 노드 번호
 
-        // 리프 노드 개수 구하기
-        dfs(headNode);
+		// 목표 노드 삭제
+		removeNode(R);
 
-        for (int i = 0; i < n; i++) {
-            if (node[i] >= 0) {
-                leafCnt++;
-            }
-        }
+		// 리프 노드 개수 파악
+		int result = getLeafNodeCnt();
 
-        // 루트 노드만 남았다면, +1
-        if (leafCnt == 0) {
-            if (node[0] == -1) {
-                leafCnt = 1;
-            }
-        }
-
-        System.out.println(leafCnt);
-        br.close();
-    }
+		bw.write(String.valueOf(result));
+		bw.flush();
+	}
 }
