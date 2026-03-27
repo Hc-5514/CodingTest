@@ -21,7 +21,7 @@ public class BOJ_1082 {
 			return String.valueOf(addNum);
 		}
 
-		if (curNum.equals("0") & addNum == 0) {
+		if (curNum.equals("0") && addNum == 0) {
 			return curNum;
 		}
 
@@ -36,6 +36,11 @@ public class BOJ_1082 {
 			}
 			sb.append(cur);
 		}
+
+		if (!flag) {
+			sb.append(addNum);
+		}
+
 		return sb.toString();
 	}
 
